@@ -52,8 +52,8 @@ class OrderService
         'unitPrice' => Utils::amount($unitPrice),
         'taxAmount' => Utils::amount($taxAmount),
         'discount' => Utils::amount(self::discount($item->subtotal, $item->total)),
-        'goodsType' => 'item', // TODO: Handle verbb/git-vouchers?
-        'imageUrl' => $image ? Craft::$app->getAssets()->getAssetUrl($image->eagerly()->one()) : '',
+        'goodsType' => 'item', // TODO: Handle verbb/gift-vouchers?
+        'imageUrl' => $image && $image->one() ? Craft::$app->getAssets()->getAssetUrl($image->eagerly()->one()) : '',
         'productUrl' => $purchasable->url ?: '',
       ];
     }

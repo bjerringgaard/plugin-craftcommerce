@@ -17,7 +17,7 @@ class NotificationQueue extends BaseJob
 
   public function getTtr(): int
   {
-    return 5;
+    return 300;
   }
 
   public function canRetry($attempt, $error)
