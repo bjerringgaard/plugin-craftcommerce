@@ -172,6 +172,30 @@ class TransactionService
     return $validTransactions[0];
   }
 
+  public static function getLatestProcessingTransaction(int $orderId, $type = RecordsTransaction::TYPE_CAPTURE): ?Transaction
+  {
+    $transactions = Commerce::getInstance()->getTransactions()->getAllTransactionsByOrderId($orderId);
+
+    $validTransactions = array_filter($transactions, function ($transaction) use ($type) {
+      return $transaction->type === $type &&
+        $transaction->status === RecordsTransaction::STATUS_PROCESSING;
+    });
+
+    // If no transactions found, return null
+    if (empty($validTransactions)) {
+      return null;
+    }
+
+    // Sort by dateCreated in descending order (newest first)
+    usort($validTransactions, function ($a, $b) {
+      return $b->dateCreated <=> $a->dateCreated;
+    });
+
+    // Return the first (newest) transaction
+    return $validTransactions[0];
+  }
+
+
   public static function getLatestParentByConfig(int $orderId, $type, $status, $reference): ?Transaction
   {
     $transactions = Commerce::getInstance()->getTransactions()->getAllTransactionsByOrderId($orderId);

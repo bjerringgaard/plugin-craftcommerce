@@ -13,6 +13,7 @@ abstract class Data
 
   const RESPONSE_SUCCESS = 'Success';
   const RESPONSE_FAIL = 'Fail';
+  const RESPONSE_FAILED = 'Failed';
   const RESPONSE_OPEN = 'Open';
   const RESPONSE_ERROR = 'Error';
   const RESPONSE_PARTIAL_SUCCESS = 'PartialSuccess';
@@ -24,6 +25,8 @@ abstract class Data
   const PAYMENT_REQUEST_TYPE_SUBSCRIPTION = 'subscription';
   const PAYMENT_REQUEST_TYPE_SUBSCRIPTION_CHARGE = 'subscriptionAndCharge';
   const PAYMENT_REQUEST_TYPE_SUBSCRIPTION_RESERVE = 'subscriptionAndReserve';
+
+  const PAYMENT_CALLBACK_TYPE_SUBSCRIPTION_PAYMENT = 'subscription_payment';
 
   const AGREEMENT_TYPE_UNSCHEDULED = 'unscheduled';
   const AGREEMENT_TYPE_RECURRING = 'recurring';

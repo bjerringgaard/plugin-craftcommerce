@@ -1,46 +1,46 @@
 {
-	"name": "altapay/craftcms-altapay",
-	"description": "AltaPay gateway integration for Craft Commerce 5",
-	"type": "craft-plugin",
-	"version": "5.0.0",
-	"keywords": [
-		"craft",
-		"cms",
-		"craftcms",
-		"craft-plugin",
-		"commerce",
-		"craft-commerce",
-		"craft-commerce-plugin",
-		"altapay",
-		"payment",
-		"gateway",
-		"integration"
-	],
-	"support": {
-		"email": "support@altapay.com",
-		"docs": "https://github.com/AltaPay/plugin-craftcommerce/wiki",
-		"issues": "https://github.com/AltaPay/plugin-craftcommerce/issues"
-	},
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "AltaPay A/S",
-			"homepage": "https://www.altapay.com/"
-		}
-	],
-	"require": {
-		"craftcms/cms": "^5.0",
-		"craftcms/commerce": "^5.0",
-		"altapay/api-php": "^3.5"
-	},
-	"autoload": {
-		"psr-4": {
-			"QD\\altapay\\": "src/"
-		}
-	},
-	"extra": {
-		"name": "Altapay",
-		"handle": "craftcms-altapay",
-		"class": "QD\\altapay\\Altapay"
-	}
+  "name": "altapay/craftcms-altapay",
+  "description": "AltaPay gateway integration for Craft Commerce 5",
+  "type": "craft-plugin",
+  "version": "5.0.1",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "commerce",
+    "craft-commerce",
+    "craft-commerce-plugin",
+    "altapay",
+    "payment",
+    "gateway",
+    "integration"
+  ],
+  "support": {
+    "email": "support@altapay.com",
+    "docs": "https://github.com/AltaPay/plugin-craftcommerce/wiki",
+    "issues": "https://github.com/AltaPay/plugin-craftcommerce/issues"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "AltaPay A/S",
+      "homepage": "https://www.altapay.com/"
+    }
+  ],
+  "require": {
+    "craftcms/cms": "^5.0",
+    "craftcms/commerce": "^5.0",
+    "altapay/api-php": "^3.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "QD\\altapay\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Altapay",
+    "handle": "craftcms-altapay",
+    "class": "QD\\altapay\\Altapay"
+  }
 }

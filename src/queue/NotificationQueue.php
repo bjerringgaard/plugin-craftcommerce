@@ -3,7 +3,9 @@
 namespace QD\altapay\queue;
 
 use craft\queue\BaseJob;
+use QD\altapay\config\Data;
 use QD\altapay\domains\payment\AuthorizeCallbackService;
+use QD\altapay\domains\payment\CaptureCallbackService;
 
 class NotificationQueue extends BaseJob
 {
@@ -11,6 +13,11 @@ class NotificationQueue extends BaseJob
 
   public function execute($queue): void
   {
+    if ($this->response->type === Data::PAYMENT_CALLBACK_TYPE_SUBSCRIPTION_PAYMENT) {
+      CaptureCallbackService::notification($this->response);
+      return;
+    }
+
     AuthorizeCallbackService::notification($this->response);
   }
 

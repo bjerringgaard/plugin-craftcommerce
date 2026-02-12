@@ -38,6 +38,33 @@ class CaptureCallbackService
     }
   }
 
+  public static function notification(mixed $response)
+  {
+    $orderId = $response->transaction_info->order ?? null;
+    if (!$orderId) throw new Exception("Invalid response: Missing order ID", 1);
+
+
+    $parent = TransactionService::getLatestProcessingTransaction($orderId, RecordsTransaction::TYPE_CAPTURE);
+    if (!$parent) throw new Exception("Transaction not found", 1);
+
+    $order = $parent->getOrder();
+    if (!$order) throw new Exception("Order not found", 1);
+
+    $status = self::_status($response->data->Result);
+    $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $status, $response);
+
+    // EVENT
+    $plugin = Altapay::getInstance();
+    if ($plugin->hasEventHandlers(Altapay::EVENT_RECURRING_CHARGE)) {
+      $event = new RecurringChargeEvent([
+        'order' => $order,
+        'transaction' => $child,
+        'status' => $status
+      ]);
+      $plugin->trigger(Altapay::EVENT_RECURRING_CHARGE, $event);
+    }
+  }
+
   private static function _status(string $result): string
   {
     switch ($result) {
@@ -46,6 +73,7 @@ class CaptureCallbackService
 
       case Data::RESPONSE_ERROR:
       case Data::RESPONSE_FAIL:
+      case Data::RESPONSE_FAILED:
         return RecordsTransaction::STATUS_FAILED;
 
       case Data::RESPONSE_OPEN:
