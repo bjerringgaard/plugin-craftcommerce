@@ -50,7 +50,7 @@ class CaptureCallbackService
     $order = $parent->getOrder();
     if (!$order) throw new Exception("Order not found", 1);
 
-    $status = self::_status($response->data->Result);
+    $status = self::_status($response->meta->Body->Result);
     $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $status, $response);
 
     // EVENT
