@@ -90,6 +90,7 @@ class RecurringService
 
       case Data::RESPONSE_ERROR:
       case Data::RESPONSE_FAIL:
+      case Data::RESPONSE_FAILED:
         return RecordsTransaction::STATUS_FAILED;
 
       case Data::RESPONSE_OPEN:
