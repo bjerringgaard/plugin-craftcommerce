@@ -13,6 +13,7 @@ class NotificationQueue extends BaseJob
 
   public function execute($queue): void
   {
+    // TODO: Handling this notification depending on payment / recurring
     if ($this->response->type === Data::PAYMENT_CALLBACK_TYPE_SUBSCRIPTION_PAYMENT) {
       CaptureCallbackService::notification($this->response);
       return;
