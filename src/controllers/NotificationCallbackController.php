@@ -6,7 +6,7 @@ use craft\web\Controller;
 use QD\altapay\services\CallbackService;
 use QD\altapay\services\QueueService;
 
-class PaymentCallbackController extends Controller
+class NotificationCallbackController extends Controller
 {
   public $enableCsrfValidation = false;
   protected array|bool|int $allowAnonymous = [
