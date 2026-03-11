@@ -42,5 +42,11 @@
     "name": "Altapay",
     "handle": "craftcms-altapay",
     "class": "QD\\altapay\\Altapay"
+  },
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true,
+      "craftcms/plugin-installer": true
+    }
   }
 }
