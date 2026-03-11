@@ -47,13 +47,15 @@ class AuthorizeCallbackService
 
   public static function notification(mixed $response)
   {
+    $result = $response?->meta?->Body?->Result ?? null;
+    if (!$result) throw new Exception("Invalid response: Missing result", 1);
+
     $parent = TransactionService::getTransactionByHash($response->transaction_info->transaction);
     if (!$parent) throw new Exception("Parent transaction not found", 1);
 
     if (TransactionService::isTransactionSuccessful($parent)) return;
 
-    $status = self::_status($response?->meta?->Body?->Result ?? '');
-    if (!$status) throw new Exception("Unknown response status", 1);
+    $status = self::_status($result);
 
     TransactionService::authorize($status, $response, $response->status, self::_code($status));
   }

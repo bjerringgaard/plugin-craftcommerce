@@ -138,7 +138,7 @@ class AuthorizeService
       'callback_ok' => $url . 'callback/v1/altapay/payment/ok',
       'callback_fail' => $url . 'callback/v1/altapay/payment/fail',
       'callback_open' => $url . 'callback/v1/altapay/payment/open',
-      'callback_notification' => $url . 'callback/v1/altapay/payment/notification',
+      'callback_notification' => $url . 'callback/v1/altapay/notification',
     ];
   }
 

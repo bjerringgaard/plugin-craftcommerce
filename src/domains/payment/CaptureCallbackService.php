@@ -40,9 +40,11 @@ class CaptureCallbackService
 
   public static function notification(mixed $response)
   {
+    $result = $response->meta->Body->Result ?? null;
+    if (!$result) throw new Exception("Invalid response: Missing result", 1);
+
     $orderId = $response->transaction_info->order ?? null;
     if (!$orderId) throw new Exception("Invalid response: Missing order ID", 1);
-
 
     $parent = TransactionService::getLatestProcessingTransaction($orderId, RecordsTransaction::TYPE_CAPTURE);
     if (!$parent) throw new Exception("Transaction not found", 1);
@@ -50,7 +52,7 @@ class CaptureCallbackService
     $order = $parent->getOrder();
     if (!$order) throw new Exception("Order not found", 1);
 
-    $status = self::_status($response->meta->Body->Result);
+    $status = self::_status($result);
     $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $status, $response);
 
     // EVENT
@@ -65,7 +67,7 @@ class CaptureCallbackService
     }
   }
 
-  private static function _status(string $result): string
+  private static function _status(?string $result): string
   {
     switch ($result) {
       case Data::RESPONSE_SUCCESS:

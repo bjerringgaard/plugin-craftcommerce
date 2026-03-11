@@ -40,7 +40,6 @@ class TransactionService
     $plugin = Altapay::getInstance();
     switch ($response->type) {
       case Data::PAYMENT_REQUEST_TYPE_PAYMENT:
-        $plugin = Altapay::getInstance();
         $event = new PaymentAuthorizationEvent([
           'order' => $order,
           'transaction' => $transaction,
