@@ -55,45 +55,21 @@ class AuthorizeCallbackService
 
     if (TransactionService::isTransactionSuccessful($parent)) return;
 
-    $status = self::_status($result);
-
-    TransactionService::authorize($status, $response, $response->status, self::_code($status));
+    $transactionStatus = TransactionService::status($result);
+    TransactionService::authorize($transactionStatus, $response, $response->status, self::_code($transactionStatus));
   }
 
   private static function _code($status): string
   {
     switch ($status) {
-      case Data::RESPONSE_SUCCESS:
+      case RecordsTransaction::STATUS_SUCCESS:
         return '200';
-      case Data::RESPONSE_ERROR:
-      case Data::RESPONSE_FAIL:
+      case RecordsTransaction::STATUS_FAILED:
         return '500';
-      case Data::RESPONSE_OPEN:
+      case RecordsTransaction::STATUS_PROCESSING:
         return '102';
       default:
         return '0';
-    }
-  }
-
-  private static function _status(string $result): string
-  {
-    switch ($result) {
-      case Data::RESPONSE_SUCCESS:
-        return RecordsTransaction::STATUS_SUCCESS;
-
-      case Data::RESPONSE_ERROR:
-      case Data::RESPONSE_FAIL:
-      case Data::RESPONSE_FAILED:
-        return RecordsTransaction::STATUS_FAILED;
-
-      case Data::RESPONSE_OPEN:
-        return RecordsTransaction::STATUS_PROCESSING;
-
-      case Data::RESPONSE_PARTIAL_SUCCESS:
-        throw new Exception("Partial Success not implemented", 1);
-
-      default:
-        throw new Exception("Unknown response status: $result", 1);
     }
   }
 

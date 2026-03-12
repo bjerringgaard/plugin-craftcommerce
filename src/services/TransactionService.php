@@ -126,12 +126,35 @@ class TransactionService
   }
 
   //* Utils
+  public static function status(?string $result): string
+  {
+    if (!$result) throw new Exception("Result is required", 1);
+
+    switch ($result) {
+      case Data::RESPONSE_SUCCESS:
+        return RecordsTransaction::STATUS_SUCCESS;
+
+      case Data::RESPONSE_ERROR:
+      case Data::RESPONSE_FAIL:
+      case Data::RESPONSE_FAILED:
+      case Data::RESPONSE_CANCELLED:
+        return RecordsTransaction::STATUS_FAILED;
+
+      case Data::RESPONSE_OPEN:
+        return RecordsTransaction::STATUS_PROCESSING;
+
+      case Data::RESPONSE_PARTIAL_SUCCESS:
+        throw new Exception("Partial Success not implemented", 1);
+
+      default:
+        throw new Exception("Unknown response status: $result", 1);
+    }
+  }
+
   public static function getTransactionById(int $id): ?Transaction
   {
     return Commerce::getInstance()->getTransactions()->getTransactionById($id);
   }
-
-  public static function getLastChildTransactionById(int $id) {}
 
   public static function getTransactionByReference(string $reference): ?Transaction
   {
@@ -193,7 +216,6 @@ class TransactionService
     // Return the first (newest) transaction
     return $validTransactions[0];
   }
-
 
   public static function getLatestParentByConfig(int $orderId, $type, $status, $reference): ?Transaction
   {

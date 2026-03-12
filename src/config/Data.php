@@ -17,6 +17,9 @@ abstract class Data
   const RESPONSE_OPEN = 'Open';
   const RESPONSE_ERROR = 'Error';
   const RESPONSE_PARTIAL_SUCCESS = 'PartialSuccess';
+  const RESPONSE_CANCELLED = 'Cancelled';
+
+  const TRANSACTION_STATUS_CANCELLED = 'cancelled';
 
   const PAYMENT_REQUEST_TYPE_PAYMENT = 'payment';
   const PAYMENT_REQUEST_TYPE_PAYMENT_CAPTURE = 'paymentAndCapture';

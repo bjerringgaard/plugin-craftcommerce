@@ -14,6 +14,9 @@ class CaptureCallbackService
   //* Authorize
   public static function callback(string $callback, mixed $response)
   {
+    $result = $response->data->Result ?? null;
+    if (!$result) throw new Exception("Invalid response: Missing result", 1);
+
     $action = $response->data->Transactions->Transaction[0] ?? null;
     if (!$action) throw new Exception("Invalid response: Missing transaction data", 1);
 
@@ -23,8 +26,9 @@ class CaptureCallbackService
     $order = $parent->getOrder();
     if (!$order) throw new Exception("Order not found", 1);
 
-    $status = self::_status($response->data->Result);
-    $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $status, $response);
+    $responseStatus = self::_status($result);
+    $transactionStatus = TransactionService::status($result);
+    $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $transactionStatus, $response);
 
     // EVENT
     $plugin = Altapay::getInstance();
@@ -32,7 +36,7 @@ class CaptureCallbackService
       $event = new RecurringChargeEvent([
         'order' => $order,
         'transaction' => $child,
-        'status' => $status
+        'status' => $responseStatus
       ]);
       $plugin->trigger(Altapay::EVENT_RECURRING_CHARGE, $event);
     }
@@ -52,8 +56,9 @@ class CaptureCallbackService
     $order = $parent->getOrder();
     if (!$order) throw new Exception("Order not found", 1);
 
-    $status = self::_status($result);
-    $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $status, $response);
+    $responseStatus = self::_status($result);
+    $transactionStatus = TransactionService::status($result);
+    $child = TransactionService::create($order, $parent, $parent->reference, RecordsTransaction::TYPE_CAPTURE, $transactionStatus, $response);
 
     // EVENT
     $plugin = Altapay::getInstance();
@@ -61,7 +66,7 @@ class CaptureCallbackService
       $event = new RecurringChargeEvent([
         'order' => $order,
         'transaction' => $child,
-        'status' => $status
+        'status' => $responseStatus
       ]);
       $plugin->trigger(Altapay::EVENT_RECURRING_CHARGE, $event);
     }
@@ -80,6 +85,9 @@ class CaptureCallbackService
 
       case Data::RESPONSE_OPEN:
         return RecordsTransaction::STATUS_PROCESSING;
+
+      case Data::RESPONSE_CANCELLED:
+        return Data::TRANSACTION_STATUS_CANCELLED;
 
       case Data::RESPONSE_PARTIAL_SUCCESS:
         throw new Exception("Partial Success not implemented", 1);
