@@ -66,8 +66,10 @@ class RecurringService
     if ($hook->dynamic_descriptor) $payload['dynamic_descriptor'] = $hook->dynamic_descriptor;
 
     $response = SubscriptionApi::chargeSubscription($payload);
-    $status = self::_status($response->data->Result);
-    $child = TransactionService::create($order, $parent, $response->data->Transactions->Transaction[0]->PaymentId, RecordsTransaction::TYPE_CAPTURE, $status, $response);
+    $status = self::_status($response->data?->Result);
+    $paymentId = $response->data?->Transactions?->Transaction[0]?->PaymentId ?? null;
+
+    $child = TransactionService::create($order, $parent, $paymentId, RecordsTransaction::TYPE_CAPTURE, $status, $response);
 
     // EVENT
     if ($plugin->hasEventHandlers(Altapay::EVENT_RECURRING_CHARGE)) {
@@ -82,8 +84,9 @@ class RecurringService
     return $response;
   }
 
-  private static function _status(string $result): string
+  private static function _status(?string $result): string
   {
+    if (!$result) return RecordsTransaction::STATUS_FAILED;
     switch ($result) {
       case Data::RESPONSE_SUCCESS:
         return RecordsTransaction::STATUS_SUCCESS;
