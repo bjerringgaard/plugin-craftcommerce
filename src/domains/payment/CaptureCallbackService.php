@@ -53,6 +53,7 @@ class CaptureCallbackService
 
     $parent = TransactionService::getLatestProcessingTransaction($orderId, RecordsTransaction::TYPE_CAPTURE);
     if (!$parent) throw new Exception("Transaction not found", 1);
+    if (TransactionService::isTransactionSuccessful($parent)) return;
 
     $order = $parent->getOrder();
     if (!$order) throw new Exception("Order not found", 1);
