@@ -17,6 +17,7 @@ class CaptureCallbackService
     $result = $response->data->Result ?? null;
     if (!$result) throw new Exception("Invalid response: Missing result", 1);
 
+    //TODO: [0] might not work here, as the response array is retuned randomly
     $action = $response->data->Transactions->Transaction[0] ?? null;
     if (!$action) throw new Exception("Invalid response: Missing transaction data", 1);
 

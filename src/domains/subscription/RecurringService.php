@@ -35,7 +35,7 @@ class RecurringService
       'transaction_info' => [
         'store' => $order->storeId ?? '',
         'order' => $order->id ?? '',
-        'transaction' => $transaction->hash ?? '',
+        'transaction' => $parent->hash ?? '',
         'subscription' => $id,
       ],
       'agreement' => [
